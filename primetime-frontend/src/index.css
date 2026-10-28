@@ -1,0 +1,436 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..800;1,400..800&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --color-gold-300: #fcd34d;
+  --color-gold-400: #f2c14e;
+  --color-gold-500: #d9a441;
+  --color-gold-600: #a16207;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  body {
+    @apply bg-stone-950 text-stone-100 font-sans antialiased;
+  }
+  ::selection {
+    @apply bg-gold-400 text-stone-950;
+  }
+}
+
+@layer components {
+  .btn-gold {
+    @apply relative inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-full bg-gold-400 px-6 py-2.5 font-semibold text-stone-950 transition-[background-color,transform] duration-200 hover:bg-gold-300 active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  /* Shine sweep across the gold button on hover */
+  .btn-gold::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      105deg,
+      transparent 40%,
+      rgba(255, 255, 255, 0.5) 50%,
+      transparent 60%
+    );
+    transform: translateX(-130%);
+  }
+  .btn-gold:hover::after {
+    transition: transform 0.65s ease;
+    transform: translateX(130%);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-gold::after {
+      display: none;
+    }
+  }
+  .btn-outline {
+    @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full border border-stone-700 px-6 py-2.5 font-medium text-stone-200 transition-[color,border-color,transform] duration-200 hover:border-gold-400 hover:text-gold-300 active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .field-label {
+    @apply mb-1.5 block text-sm font-medium text-stone-300;
+  }
+  .field-input {
+    @apply block min-h-11 w-full rounded-xl border border-stone-700 bg-stone-900 px-3.5 py-2.5 text-base text-stone-100 placeholder-stone-500 transition-colors duration-200 focus:border-gold-400 focus:outline-none focus:ring-2 focus:ring-gold-400/30 [color-scheme:dark];
+  }
+  .field-error {
+    @apply mt-1.5 text-sm text-red-400;
+  }
+  .card {
+    @apply rounded-2xl border border-stone-800 bg-stone-900/60 backdrop-blur-sm;
+  }
+}
+
+@layer utilities {
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  .animate-marquee {
+    animation: marquee 28s linear infinite;
+  }
+  .animate-marquee:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes scroll-hint {
+    0% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    30% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(300%);
+      opacity: 0;
+    }
+  }
+  .animate-scroll-hint {
+    animation: scroll-hint 1.8s ease-in-out infinite;
+  }
+
+  /* Filmic grain overlay for hero / CTA imagery */
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.045;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ——— Kinetic facility scenes (motion-designed card backgrounds) ——— */
+  .scene-grid {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.4) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+
+  @keyframes scene-eq {
+    0%,
+    100% {
+      transform: scaleY(0.3);
+    }
+    50% {
+      transform: scaleY(1);
+    }
+  }
+  .scene-eq {
+    transform-origin: bottom;
+    animation: scene-eq 1.6s ease-in-out infinite;
+  }
+
+  @keyframes scene-rep {
+    0%,
+    14% {
+      transform: translateY(26px);
+    }
+    46%,
+    60% {
+      transform: translateY(-14px);
+    }
+    90%,
+    100% {
+      transform: translateY(26px);
+    }
+  }
+  .scene-rep {
+    animation: scene-rep 3s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+  }
+
+  @keyframes scene-twinkle {
+    0%,
+    100% {
+      opacity: 0.15;
+    }
+    50% {
+      opacity: 0.9;
+    }
+  }
+  .scene-twinkle {
+    animation: scene-twinkle 3.2s ease-in-out infinite;
+  }
+
+  @keyframes scene-window {
+    0%,
+    100% {
+      opacity: 0.9;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+  .scene-window {
+    animation: scene-window 5s ease-in-out infinite;
+  }
+
+  @keyframes scene-bubble {
+    0% {
+      transform: translateY(0) scale(0.55);
+      opacity: 0;
+    }
+    12% {
+      opacity: 0.85;
+    }
+    100% {
+      transform: translateY(-130px) scale(1);
+      opacity: 0;
+    }
+  }
+  .scene-bubble {
+    animation: scene-bubble 4.2s linear infinite;
+  }
+
+  @keyframes scene-ball-x {
+    from {
+      transform: translateX(-14%);
+    }
+    to {
+      transform: translateX(102%);
+    }
+  }
+  .scene-ball-x {
+    animation: scene-ball-x 8.5s linear infinite;
+  }
+  @keyframes scene-ball-bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    22% {
+      transform: translateY(-15px);
+    }
+    44% {
+      transform: translateY(0);
+    }
+    66% {
+      transform: translateY(-8px);
+    }
+    82% {
+      transform: translateY(0);
+    }
+  }
+  .scene-ball-bounce {
+    animation: scene-ball-bounce 2.125s ease-in-out infinite;
+  }
+  @keyframes scene-ball-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(720deg);
+    }
+  }
+  .scene-ball-spin {
+    animation: scene-ball-spin 4.25s linear infinite;
+  }
+
+  @keyframes scene-beam {
+    0%,
+    100% {
+      transform: rotate(7deg);
+      opacity: 0.45;
+    }
+    50% {
+      transform: rotate(-6deg);
+      opacity: 0.8;
+    }
+  }
+  .scene-beam {
+    transform-origin: top center;
+    animation: scene-beam 7.5s ease-in-out infinite;
+  }
+
+  @keyframes scene-ripple {
+    0% {
+      transform: translate(-50%, -50%) scale(0.15);
+      opacity: 0.75;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(2);
+      opacity: 0;
+    }
+  }
+  .scene-ripple {
+    animation: scene-ripple 5.4s cubic-bezier(0, 0, 0.3, 1) infinite;
+  }
+
+  @keyframes scene-steam {
+    0% {
+      transform: translate(0, 24px);
+      opacity: 0;
+    }
+    30% {
+      opacity: 0.45;
+    }
+    100% {
+      transform: translate(16px, -95px);
+      opacity: 0;
+    }
+  }
+  .scene-steam {
+    animation: scene-steam 7s ease-in-out infinite;
+  }
+
+  @keyframes scene-breathe {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.7;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 1;
+    }
+  }
+  .scene-breathe {
+    animation: scene-breathe 4.5s ease-in-out infinite;
+  }
+
+  /* Slow cinematic drift for photographic card backgrounds */
+  @keyframes scene-kenburns {
+    from {
+      transform: scale(1) translate(0, 0);
+    }
+    to {
+      transform: scale(1.12) translate(-1.5%, 1.5%);
+    }
+  }
+  .scene-kenburns {
+    animation: scene-kenburns 24s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+
+  /* ——— Walk cycle (landing journey scene) ———
+     Limbs rotate about fixed joints baked into the keyframes
+     (translate → rotate → untranslate), so no transform-origin
+     quirks across browsers. Opposite limbs reuse the same
+     keyframes phase-shifted by half a stride via .walk-alt. */
+  @keyframes walk-thigh {
+    0%,
+    100% {
+      transform: translate(38px, 66px) rotate(-30deg) translate(-38px, -66px);
+    }
+    25% {
+      transform: translate(38px, 66px) rotate(1deg) translate(-38px, -66px);
+    }
+    50% {
+      transform: translate(38px, 66px) rotate(27deg) translate(-38px, -66px);
+    }
+    75% {
+      transform: translate(38px, 66px) rotate(-4deg) translate(-38px, -66px);
+    }
+  }
+  @keyframes walk-shin {
+    0%,
+    100% {
+      transform: translate(38px, 96px) rotate(8deg) translate(-38px, -96px);
+    }
+    25% {
+      transform: translate(38px, 96px) rotate(14deg) translate(-38px, -96px);
+    }
+    50% {
+      transform: translate(38px, 96px) rotate(36deg) translate(-38px, -96px);
+    }
+    75% {
+      transform: translate(38px, 96px) rotate(56deg) translate(-38px, -96px);
+    }
+  }
+  @keyframes walk-arm {
+    0%,
+    100% {
+      transform: translate(42px, 31px) rotate(25deg) translate(-42px, -31px);
+    }
+    50% {
+      transform: translate(42px, 31px) rotate(-27deg) translate(-42px, -31px);
+    }
+  }
+  @keyframes walk-forearm {
+    0%,
+    100% {
+      transform: translate(42px, 53px) rotate(-12deg) translate(-42px, -53px);
+    }
+    50% {
+      transform: translate(42px, 53px) rotate(-36deg) translate(-42px, -53px);
+    }
+  }
+  @keyframes walk-bob {
+    0%,
+    50%,
+    100% {
+      transform: translateY(2px);
+    }
+    25%,
+    75% {
+      transform: translateY(-2px);
+    }
+  }
+  .walker {
+    --stride: 0.95s;
+  }
+  .walk-bob {
+    animation: walk-bob var(--stride, 0.95s) ease-in-out infinite;
+  }
+  .walk-thigh {
+    animation: walk-thigh var(--stride, 0.95s) cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+  .walk-shin {
+    animation: walk-shin var(--stride, 0.95s) cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+  .walk-arm {
+    animation: walk-arm var(--stride, 0.95s) cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+  .walk-forearm {
+    animation: walk-forearm var(--stride, 0.95s) cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+  .walk-alt {
+    animation-delay: calc(var(--stride, 0.95s) / -2);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-marquee,
+    .animate-scroll-hint,
+    .scene-eq,
+    .scene-rep,
+    .scene-twinkle,
+    .scene-window,
+    .scene-bubble,
+    .scene-ball-x,
+    .scene-ball-bounce,
+    .scene-ball-spin,
+    .scene-beam,
+    .scene-ripple,
+    .scene-steam,
+    .scene-breathe,
+    .scene-kenburns,
+    .walk-bob,
+    .walk-thigh,
+    .walk-shin,
+    .walk-arm,
+    .walk-forearm {
+      animation: none;
+    }
+  }
+}
