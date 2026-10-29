@@ -33,15 +33,17 @@ export default function FacilityCard({ facility, featured = false }) {
       whileHover={{ y: -8 }}
       whileTap={{ scale: 0.985 }}
       transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-      className="group relative block overflow-hidden rounded-3xl border border-stone-800/80 bg-stone-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+      className="group relative block h-full overflow-hidden rounded-3xl border border-stone-800/80 bg-stone-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
     >
       {/* Video-first media carousel with the motion-design layer on top;
           the animated scene takes over if every clip and photo fails. */}
       {/* Shorter on phones: at half the screen width a 20rem-tall card is a
-          narrow column of image with the type crushed into the bottom. */}
+          narrow column of image with the type crushed into the bottom.
+          A min-height, not a fixed one — at half width a two-word name wraps,
+          and a fixed box pushed the text up into the chip and clipped it. */}
       <div
-        className={`relative overflow-hidden ${
-          featured ? 'h-56 sm:h-80 lg:h-[26rem]' : 'h-44 sm:h-72'
+        className={`relative flex h-full flex-col justify-end overflow-hidden ${
+          featured ? 'min-h-56 sm:min-h-80 lg:min-h-[26rem]' : 'min-h-44 sm:min-h-72'
         }`}
       >
         <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.04] motion-reduce:group-hover:scale-100">
@@ -61,17 +63,18 @@ export default function FacilityCard({ facility, featured = false }) {
         />
 
         {/* Category chip */}
-        <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-stone-950/60 px-3 py-1.5 text-xs font-medium tracking-wide text-stone-100 backdrop-blur-md">
+        <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-white/15 bg-stone-950/60 px-2.5 py-1 text-[10px] font-medium tracking-wide text-stone-100 backdrop-blur-md sm:left-4 sm:top-4 sm:px-3 sm:py-1.5 sm:text-xs">
           <Icon size={13} className={meta.text} aria-hidden="true" />
           {meta.label}
         </span>
 
-        {/* Bottom content over image */}
-        <div className="absolute inset-x-0 bottom-0 p-3.5 sm:p-5 lg:p-6">
+        {/* Bottom content over image. In the flow (top padding keeps it clear
+            of the chip), so the card grows when the text needs more room. */}
+        <div className="relative p-3.5 pt-14 sm:p-5 sm:pt-16 lg:p-6 lg:pt-16">
           <div className="flex items-end justify-between gap-2 sm:gap-3">
             <div className="min-w-0">
               <h3
-                className={`font-display font-semibold text-white ${
+                className={`font-display font-semibold leading-tight text-white ${
                   featured
                     ? 'text-xl sm:text-3xl lg:text-4xl'
                     : 'text-base sm:text-2xl'
@@ -86,7 +89,7 @@ export default function FacilityCard({ facility, featured = false }) {
               </p>
               {isBenefit ? (
                 <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm sm:mt-3">
-                  <BenefitBadge label={cta.label} />
+                  <BenefitBadge label={cta.label} size={featured ? 'sm' : 'xs'} />
                   <span className="hidden items-center gap-1 text-xs text-stone-400 sm:inline-flex">
                     <Users size={12} aria-hidden="true" /> up to {facility.capacity}
                   </span>
@@ -125,8 +128,10 @@ export default function FacilityCard({ facility, featured = false }) {
                 {isBenefit ? cta.note : cta.label}
               </p>
             </div>
+            {/* Half-width phone cards drop the arrow: it took ~45px of a
+                ~130px text column, and the whole card is the link anyway. */}
             <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-md transition-all duration-300 group-hover:border-gold-400 group-hover:bg-gold-400 group-hover:text-stone-950 sm:h-11 sm:w-11"
+              className={`${featured ? 'flex' : 'hidden sm:flex'} h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-md transition-all duration-300 group-hover:border-gold-400 group-hover:bg-gold-400 group-hover:text-stone-950 sm:h-11 sm:w-11`}
               aria-hidden="true"
             >
               <ArrowUpRight size={16} className="sm:hidden" />

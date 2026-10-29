@@ -144,25 +144,31 @@ function Hero({ user }) {
         initial="hidden"
         animate="show"
         style={{ y: contentY, opacity: contentOpacity }}
-        // Tighter top and bottom on phones — the old 9rem/6rem pushed the
-        // headline and the buttons below the fold on a small screen.
-        className="relative mx-auto w-full max-w-6xl px-4 pb-14 pt-24 sm:px-6 sm:pb-24 sm:pt-36"
+        // Tighter top on phones — the old 9rem pushed the headline and the
+        // buttons below the fold. The bottom clears the fixed MobileDock and
+        // its fade, which otherwise sat over the stats and showreel control.
+        className="relative mx-auto w-full max-w-6xl px-4 pb-28 pt-20 sm:px-6 sm:pb-24 sm:pt-36"
       >
         {/* Day-ticker badge — slides in step with the showreel, walking
             the visitor through one day at Primetime. */}
         <motion.p
           variants={fadeUp}
           layout
-          className="inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-medium tracking-[0.2em] uppercase text-stone-200 backdrop-blur-md"
+          // Smaller type and tracking on phones: at desktop sizes the longest
+          // tagline made the pill ~450px wide and the hero clipped its end.
+          // max-w-full + truncate below is the backstop for narrower screens.
+          className="inline-flex max-w-full items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[10px] font-medium tracking-[0.14em] uppercase text-stone-200 backdrop-blur-md sm:px-4 sm:text-xs sm:tracking-[0.2em]"
         >
           <span className="sr-only">
             Ibadan, Nigeria — one address, open from first light to last call.
           </span>
-          <span aria-hidden="true" className="inline-flex items-center gap-2.5">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-gold-400" />
-            <span className="text-gold-300">Ibadan</span>
-            <span className="h-3 w-px bg-white/20" />
-            <span className="relative block h-4 overflow-hidden">
+          <span aria-hidden="true" className="inline-flex min-w-0 items-center gap-2.5">
+            <span className="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-gold-400" />
+            {/* The city label gives way on phones so the time and tagline —
+                the part that changes with the reel — fit unclipped. */}
+            <span className="hidden shrink-0 text-gold-300 sm:inline">Ibadan</span>
+            <span className="hidden h-3 w-px shrink-0 bg-white/20 sm:block" />
+            <span className="relative block h-4 min-w-0 overflow-hidden">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.span
                   key={slide}
@@ -172,8 +178,8 @@ function Hero({ user }) {
                   transition={{ duration: 0.55, ease: EASE }}
                   className="flex items-center gap-2 whitespace-nowrap leading-4"
                 >
-                  <span className="text-gold-300/90">{HERO_REEL[slide].time}</span>
-                  <span className="text-stone-300">{HERO_REEL[slide].tagline}</span>
+                  <span className="shrink-0 text-gold-300/90">{HERO_REEL[slide].time}</span>
+                  <span className="min-w-0 truncate text-stone-300">{HERO_REEL[slide].tagline}</span>
                 </motion.span>
               </AnimatePresence>
             </span>

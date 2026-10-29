@@ -41,7 +41,9 @@ export function MaskText({ lines, delay = 0, mode = 'mount', className = '' }) {
  */
 export function Counter({ to, prefix = '', suffix = '', duration = 1.8 }) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-40px' });
+  // Vertical inset only: a bare '-40px' also trims the sides, and on a phone
+  // a counter in the first column sits inside that band and never starts.
+  const inView = useInView(ref, { once: true, margin: '-40px 0px' });
   const reduce = useReducedMotion();
   const [value, setValue] = useState(0);
 

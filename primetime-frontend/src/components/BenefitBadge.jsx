@@ -11,15 +11,21 @@ import { Sparkles } from 'lucide-react';
  * costs nothing per frame; it also disappears entirely under
  * prefers-reduced-motion, leaving the static pill.
  */
+// 'xs' is for half-width cards on phones: the label may wrap to two lines
+// there, so it drops to a rounded rectangle rather than a squashed pill.
+const SIZES = {
+  xs: 'rounded-lg px-2 py-1 text-[10px] leading-tight sm:rounded-full sm:px-3 sm:text-xs',
+  sm: 'rounded-full px-3 py-1 text-xs',
+  lg: 'rounded-full px-4 py-2 text-sm',
+};
+
 export default function BenefitBadge({ label, size = 'sm' }) {
   const reduce = useReducedMotion();
   const big = size === 'lg';
 
   return (
     <span
-      className={`relative inline-flex items-center gap-1.5 overflow-hidden rounded-full border border-gold-400/40 bg-gold-400/15 font-semibold text-gold-200 ${
-        big ? 'px-4 py-2 text-sm' : 'px-3 py-1 text-xs'
-      }`}
+      className={`relative inline-flex items-center gap-1.5 overflow-hidden border border-gold-400/40 bg-gold-400/15 font-semibold text-gold-200 ${SIZES[size]}`}
     >
       {!reduce && (
         <motion.span
@@ -35,7 +41,7 @@ export default function BenefitBadge({ label, size = 'sm' }) {
           }}
         />
       )}
-      <Sparkles size={big ? 15 : 12} aria-hidden="true" />
+      <Sparkles size={big ? 15 : 12} className="shrink-0" aria-hidden="true" />
       {label}
     </span>
   );

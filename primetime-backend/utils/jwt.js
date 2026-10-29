@@ -7,10 +7,19 @@ const signToken = (userId) =>
     expiresIn: process.env.JWT_EXPIRE || '7d',
   });
 
-const cookieOptions = () => ({
+// In production the frontend (vercel.app) and API (onrender.com) are different
+// sites, so the cookie must be SameSite=None (which requires Secure) or the
+// browser won't send it with API requests.
+const isProd = () => process.env.NODE_ENV === 'production';
+
+const baseCookieOptions = () => ({
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: 'lax',
+  secure: isProd(),
+  sameSite: isProd() ? 'none' : 'lax',
+});
+
+const cookieOptions = () => ({
+  ...baseCookieOptions(),
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days, matches JWT_EXPIRE
 });
 
@@ -19,7 +28,7 @@ const setAuthCookie = (res, token) => {
 };
 
 const clearAuthCookie = (res) => {
-  res.clearCookie(COOKIE_NAME, { httpOnly: true, sameSite: 'lax' });
+  res.clearCookie(COOKIE_NAME, baseCookieOptions());
 };
 
 module.exports = { COOKIE_NAME, signToken, setAuthCookie, clearAuthCookie };
